@@ -10,50 +10,42 @@ def verification(guess, secret_word):
             result.append('present')
         else:
             result.append('absent')
-        i += 1  
+        i += 1
     return result
 
 def print_secret_word(result, guess):
     display = []
     i = 0
     g = 0
-    while i < word_len:
-        if result[i] == 'correct':
+    while i < word_len and g < len(result):
+        if result[g] == 'correct':
             display.append("[" + guess[i].upper() + "]")
-        elif result[i] == 'present':
+        elif result[g] == 'present':
             display.append("(" + guess[i] + ")")
         else:
             display.append(" " + guess[i] + " ")
         i += 1
+        g += 1
     print("Result:", " ".join(display))
 
-def choice_word(words):
-    x = random.random()
-    y = x * len(words)
-    z = int(y)
-    return words[z]
 
 
 words = ['apple','bread','candy','dream','eagle','flame','grape','house','input','joker']
 tries = 6
 word_len = 5
+secret_word = random.choice(words)
 
 print("Welcome to Wordle!")
 print("Guess the",word_len ,"-letter word. You have", tries, "tries.")
 
 while tries != 0:
-    guess = input(f"Attempt {7 - tries}/6 – Enter guess: ").lower()
-
-    if not guess.isalpha():
-        print("Not number")
-        continue
-    
+    guess = input(f"Attempt {7 - tries}/6– Enter guess: ").lower()
+   
+    print(guess)
+    print(len(guess))
     if len(guess) != word_len:
         print("Wrong length. Expected", word_len)
         continue
-
-    if tries == 6:
-        secret_word = choice_word(words)
     
     if guess == secret_word:
         print("You win!!!")
@@ -64,18 +56,19 @@ while tries != 0:
         else:
             break
         
-    print_secret_word(verification(secret_word, guess), guess)
+    print_secret_word(verification(guess, secret_word), guess)
 
     tries -= 1
 
     if tries == 0:
-        print("You lose! The word was:", secret_word)
         answer = input("If you want play one more time, print \"play\"  ")
         if answer == "play":
             tries = 6
-            continue
         else:
             break
+else:
+    final = secret_word
+    print("You lose! The word was:", final)
 
 """
             Що ще можна було би вдосконалити
@@ -90,51 +83,41 @@ def choice_word(words):
 secret_word = random.choice(words)
 
 Замість:
-def verification(guess, secret_word):
+def verification(secret_word):
     result= []
     i = 0
     while i < word_len:
-        if guess[i] == secret_word[i]:
+        if guess == secret_word[i]:
             result.append('correct')
-        elif guess[i] in secret_word:
+        elif guess in secret_word:
             result.append('present')
         else:
             result.append('absent')
         i += 1
     return result
 
-def print_secret_word(result, guess):
+def print_secret_word(result):
     display = []
-    i = 0
     while i < word_len:
         if result[i] == 'correct':
-            display.append("[" + guess[i].upper() + "]")
+            display.append("[" + guess.upper() + "]")
         elif result[i] == 'present':
-            display.append("(" + guess[i] + ")")
+            display.append("(" + guess + ")")
         else:
-            display.append(" " + guess[i] + " ")
+            display.append(" " + guess + " ")
         i += 1
-    print("Result:", " ".join(display))
+    return display
 
 Можна було би написати:
-def print_secret_word(secret_word, guess):
+def print_secret_word(secret_word):
     display = []
-    i = 0
-    while i < word_len:
-        if guess[i] == secret_word[i]:
-           display.append("[" + guess[i].upper() + "]") 
-        elif guess[i] in secret_word:
-            display.append("(" + guess[i].upper() + ")")
+    for i in range(len(secre_word))
+        if guess == secret_word[i]:
+            display.append("[" + guess.upper() + "]")
+        elif guess in secret_word:
+            display.append("(" + guess + ")")
         else:
-            display.append(" " + guess[i] + " ")
-        i += 1
-    print("Result:", " ".join(display))
-
-Ці зміни допомогли би зменшити кількість коду та збільшити читабельність
-
-Також я прибрав частину коду, яку вважаю зайвою.
-
-junk = ''.join([c for c in display if c])
-
+            display.append(" " + guess + " ")
+    return display
 
 """
